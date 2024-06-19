@@ -22,52 +22,52 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## Descripción
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Este repositorio contiene la prueba técnica desarrollada para aplicar a la convocatoria #18 de 2024 del IDEA
 
-## Installation
+## Instalación
+
+Primero, instalar las dependencias con el siguiente comando
 
 ```bash
 $ npm install
 ```
 
-## Running the app
+## Configuración
 
+Se deben configurar las variables de entorno creando un archivo .env con las siguientes variables (Se provee un archivo `.env.example` de muestra):
+
+```
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=user
+DB_PASSWORD=password
+DB_DATABASE_NAME=air_quality
+```
+
+Cabe aclarar que la base de datos debe estar poblada por el backup enviado para la prueba técnica.
+
+## Ejecutar el proyecto
+El proyecto se ejecutará en el puerto 3000 del localhost usando el siguiente comando
 ```bash
-# development
-$ npm run start
-
-# watch mode
 $ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+## Realizar peticiones
+Usar el archivo `postman.json` provisto en los archivos del proyecto para realizar las peticiones HTTP desarrolladas:
+1. `localhost:3000/extracted-data/one-record/station_sk/date/time` es una petición GET que obtendrá un registro para la estación dada en la fecha y hora especificada.
+2. `localhost:3000/extracted-data/records-by-date-range/station_sk/initial_date/final_date` es una petición GET que obtendrá todos los registros para una estación entre los rangos de fecha dados.
+3. `localhost:3000/extracted-data/add-record` es una petición POST que permite agregar un nuevo registro a la base de datos enviando un body en formato `json` con la siguiente estructura:
+    ```json
+    {
+        "station_sk": "E2",
+        "medition_date": "2024-06-19",
+        "medition_time": "23:59:00",
+        "pm2_5": 8.34,
+        "pm10": 15.5,
+        "temperature": 12.4,
+        "humidity": 93.56,
+        "barometric_pressure": 803.44
+    }
+    ```
