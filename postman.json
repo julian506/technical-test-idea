@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "80cb1076-b50e-49cb-b49d-8d0d6f70b124",
+		"name": "technical-test-idea",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19441772"
+	},
+	"item": [
+		{
+			"name": "Get one record from extracted data table",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/extracted-data/one-record/E1/2022-04-21/11:02:19",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"extracted-data",
+						"one-record",
+						"E1",
+						"2022-04-21",
+						"11:02:19"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get records from extracted data by date range",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/extracted-data/records-by-date-range/E1/2022-04-19/2022-04-20",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"extracted-data",
+						"records-by-date-range",
+						"E1",
+						"2022-04-19",
+						"2022-04-20"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add record to Extracted Data table",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"station_sk\": \"E2\",\n    \"medition_date\": \"2024-06-19\",\n    \"medition_time\": \"23:59:00\",\n    \"pm2_5\": 8.34,\n    \"pm10\": 15.5,\n    \"temperature\": 12.4,\n    \"humidity\": 93.56,\n    \"barometric_pressure\": 803.44\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/extracted-data/add-record",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"extracted-data",
+						"add-record"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
