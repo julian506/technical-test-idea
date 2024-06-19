@@ -29,7 +29,6 @@ export class ExtractedDataController {
   addExtractedDataRecord(
     @Body() extractedData: AddExtractedDataDto
   ) {
-    console.log(extractedData)
     return this.extractedDataService.addExtractedDataRecord(extractedData);
   }
 }

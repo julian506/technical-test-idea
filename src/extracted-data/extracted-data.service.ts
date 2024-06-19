@@ -12,15 +12,25 @@ export class ExtractedDataService {
     private extractedDataRepository: Repository<ExtractedData>,
   ) {}
 
-  async getOneExtractedDataRecord(station_sk: string, date: Date, hour: string) {
-    return await this.extractedDataRepository.findOne({
-      where: {
-        station_sk,
-        medition_date: date,
-        medition_time: hour,
-      },
-      select: ['medition_date', 'medition_time', 'pm2_5', 'pm10'],
-    });
+  async getOneExtractedDataRecord(
+    station_sk: string,
+    date: Date,
+    hour: string,
+  ) {
+    try {
+      return await this.extractedDataRepository.findOne({
+        where: {
+          station_sk,
+          medition_date: date,
+          medition_time: hour,
+        },
+        select: ['medition_date', 'medition_time', 'pm2_5', 'pm10'],
+      });
+    } catch(error) {
+      return {
+        error
+      };
+    }
   }
 
   async getExtractedDataByDateRange(
@@ -28,29 +38,47 @@ export class ExtractedDataService {
     initial_date: Date,
     final_date: Date,
   ) {
-    return await this.extractedDataRepository.find({
-      where: {
-        station_sk,
-        medition_date: And(
-          MoreThanOrEqual(initial_date),
-          LessThanOrEqual(final_date),
-        ),
-      },
-      select: ['medition_date', 'medition_time', 'pm2_5', 'pm10'],
-    });
+    try {
+      return await this.extractedDataRepository.find({
+        where: {
+          station_sk,
+          medition_date: And(
+            MoreThanOrEqual(initial_date),
+            LessThanOrEqual(final_date),
+          ),
+        },
+        select: ['medition_date', 'medition_time', 'pm2_5', 'pm10'],
+      });
+    } catch(error) {
+      return {
+        error
+      };
+    }
   }
 
   async addExtractedDataRecord(extractedData: AddExtractedDataDto) {
-    const latestRecord = await this.extractedDataRepository.findOne({
-      where: {
-        station_sk: extractedData.station_sk,
-      },
-      order: {
-        createdAt: 'DESC',
-      },
-    });
-    const id = latestRecord ? latestRecord.id + 1 : 1;
-    const dataToAdd = {id, ...extractedData, createdAt: new Date(), updatedAt: new Date()};
-    return await this.extractedDataRepository.save(dataToAdd);
+    try {
+      const latestRecord = await this.extractedDataRepository.findOne({
+        where: {
+          station_sk: extractedData.station_sk,
+        },
+        order: {
+          createdAt: 'DESC',
+        },
+      });
+      const id = latestRecord ? latestRecord.id + 1 : 1;
+      const dataToAdd = {
+        id,
+        ...extractedData,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      return await this.extractedDataRepository.save(dataToAdd);
+    } catch (error) {
+      return {
+        error: error.code,
+        detail: error.detail,
+      };
+    }
   }
 }
