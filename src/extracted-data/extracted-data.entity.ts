@@ -1,8 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity({ name: 'ExtractedData' })
 export class ExtractedData {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: number;
 
   @Column('date')
@@ -28,4 +28,10 @@ export class ExtractedData {
 
   @Column('float')
   barometric_pressure: number;
+
+  @Column('timestamp')
+  createdAt: Date;
+
+  @Column('timestamp')
+  updatedAt: Date;
 }

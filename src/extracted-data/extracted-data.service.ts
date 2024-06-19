@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { And, Repository } from 'typeorm';
 import { ExtractedData } from './extracted-data.entity';
 import { MoreThanOrEqual, LessThanOrEqual } from 'typeorm';
+import { AddExtractedDataDto } from './extracted-data.dto';
 
 @Injectable()
 export class ExtractedDataService {
@@ -11,8 +12,8 @@ export class ExtractedDataService {
     private extractedDataRepository: Repository<ExtractedData>,
   ) {}
 
-  getOneExtractedDataRecord(station_sk: string, date: Date, hour: string) {
-    return this.extractedDataRepository.findOne({
+  async getOneExtractedDataRecord(station_sk: string, date: Date, hour: string) {
+    return await this.extractedDataRepository.findOne({
       where: {
         station_sk,
         medition_date: date,
@@ -22,12 +23,12 @@ export class ExtractedDataService {
     });
   }
 
-  getExtractedDataByDateRange(
+  async getExtractedDataByDateRange(
     station_sk: string,
     initial_date: Date,
     final_date: Date,
   ) {
-    return this.extractedDataRepository.find({
+    return await this.extractedDataRepository.find({
       where: {
         station_sk,
         medition_date: And(
@@ -37,5 +38,19 @@ export class ExtractedDataService {
       },
       select: ['medition_date', 'medition_time', 'pm2_5', 'pm10'],
     });
+  }
+
+  async addExtractedDataRecord(extractedData: AddExtractedDataDto) {
+    const latestRecord = await this.extractedDataRepository.findOne({
+      where: {
+        station_sk: extractedData.station_sk,
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+    const id = latestRecord ? latestRecord.id + 1 : 1;
+    const dataToAdd = {id, ...extractedData, createdAt: new Date(), updatedAt: new Date()};
+    return await this.extractedDataRepository.save(dataToAdd);
   }
 }

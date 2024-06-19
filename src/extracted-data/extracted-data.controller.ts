@@ -1,5 +1,6 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ExtractedDataService } from './extracted-data.service';
+import { AddExtractedDataDto } from './extracted-data.dto';
 
 @Controller('extracted-data')
 export class ExtractedDataController {
@@ -22,5 +23,13 @@ export class ExtractedDataController {
     @Param('final_date') final_date: Date,
   ) {
     return this.extractedDataService.getExtractedDataByDateRange(station_sk, initial_date, final_date);
+  }
+
+  @Post('/add-record')
+  addExtractedDataRecord(
+    @Body() extractedData: AddExtractedDataDto
+  ) {
+    console.log(extractedData)
+    return this.extractedDataService.addExtractedDataRecord(extractedData);
   }
 }
