@@ -58,22 +58,24 @@ export class ExtractedDataService {
 
   async addExtractedDataRecord(extractedData: AddExtractedDataDto) {
     try {
-      const latestRecord = await this.extractedDataRepository.findOne({
-        where: {
-          station_sk: extractedData.station_sk,
-        },
+      const latestRecord = await this.extractedDataRepository.find({
         order: {
-          createdAt: 'DESC',
+          id: 'DESC',
         },
+        take: 1,
       });
-      const id = latestRecord ? latestRecord.id + 1 : 1;
+      const id = latestRecord ? latestRecord[0].id + 1 : 1;
       const dataToAdd = {
         id,
         ...extractedData,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      return await this.extractedDataRepository.save(dataToAdd);
+      const addedData = await this.extractedDataRepository.save(dataToAdd);
+      return {
+        message: 'Data added successfully',
+        data: addedData,
+      }
     } catch (error) {
       return {
         error: error.code,
